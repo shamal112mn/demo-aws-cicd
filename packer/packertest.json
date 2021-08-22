@@ -1,0 +1,39 @@
+{
+    "variables": {
+      "aws_region": "us-east-2"
+    },
+    "builders": [
+      {
+        "type": "amazon-ebs",
+        "profile": "default",
+        "region": "{{user `aws_region`}}",
+        "instance_type": "t2.micro",
+        "source_ami": "ami-0443305dabd4be2bc",
+        "ssh_username": "ec2-user",
+        "ami_name": "asg-image-dev-v1",
+        "ami_description": "Amazon Linux",
+        "run_tags": {
+          "Name": "packer-image-builder",
+          "Tool": "Packer",
+          "Author": "company"
+        }
+      }
+    ],
+    "provisioners": [
+        {
+         "type": "shell",
+         "inline": 
+            [                               
+             "sudo yum install httpd -y",
+             "sudo systemctl start httpd",
+             "sudo systemctl enable httpd"                 
+            ]
+        },
+       {
+         "type": "file",
+         "source": "index.html",
+         "destination": "/var/www/html"
+       }
+  ]
+  }
+  
