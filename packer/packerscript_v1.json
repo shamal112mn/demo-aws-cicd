@@ -1,0 +1,34 @@
+{
+    "variables": {
+      "aws_region": "us-east-1"
+    },
+    "builders": [{
+      "ami_name": "amazon-linux-v1",
+      "ami_description": "Linux-AMI",
+      "instance_type": "t2.micro",
+      "name": "amazon-linux-ami",
+      "region": "{{user `aws_region`}}",
+      "type": "amazon-ebs",      
+      "source_ami_filter": "ami-0c2b8ca1dad447f8a",
+      "ssh_username": "ec2-user"
+    }],
+
+    "provisioners": [{
+         "type": "shell",
+         "inline": [
+                  "sudo yum install -y git",               
+                  "sudo yum install httpd -y",
+                  "sudo systemctl start httpd",
+                  "sudo systemctl enable httpd",
+                  "export INSTANCE_ID=$(curl http://169.254.169.254/latest/meta-data/instance-id)"
+                    
+                ]
+            },
+        {
+          "type": "file",
+          "source": "index.html",
+          "destination": "/var/www/html"
+        }
+   ]
+}
+  
