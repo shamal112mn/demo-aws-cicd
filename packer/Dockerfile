@@ -21,10 +21,10 @@ node("packer"){
     withCredentials([usernamePassword(credentialsId: 'jenkins_aws_keys', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
         withEnv(["AWS_REGION=${aws_region_var}", "PACKER_AMI_NAME=${image_name}"]) {
             stage('Packer Validate') {
-                sh 'packer validate packertest.json'
+                sh 'packer validate packer/packertest.json'
             }
             stage('Packer Build') {
-                sh 'packer build packertest.json'
+                sh 'packer build packer/packertest.json'
             }
         }
     }
