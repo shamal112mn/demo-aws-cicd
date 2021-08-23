@@ -13,7 +13,7 @@ else if(params.environment == "qa") {
     aws_region_var = "us-east-2"
 }
  
-def image_name = "asg-image-dev-${params.environment}-${ UUID.randomUUID().toString()}"
+def image_name = "asg-image-${params.environment}-${ UUID.randomUUID().toString()}"
 node{
     stage('Pull Repo') {
         git branch: 'dev', url: 'https://github.com/shamal112mn/demo-aws-cicd.git'
@@ -22,16 +22,16 @@ node{
         withEnv(["AWS_REGION=${aws_region_var}", "PACKER_AMI_NAME=${image_name}"]) {
             stage('Packer Validate') {
                 sh """
-                cd packer
-                packer version
-                packer validate packertest.json
-                cat text.txt
+                    cd packer
+                    packer version
+                    packer validate packertest.json
+                    cat text.txt
                 """
             }
             stage('Packer Build') {
                 sh """
-                cd packer
-                packer build packertest.json
+                    cd packer
+                    packer build packertest.json
                 """
             }
         }
