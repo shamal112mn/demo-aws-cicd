@@ -14,7 +14,7 @@ else if(params.environment == "qa") {
 }
  
 def image_name = "asg-image-dev-${params.environment}-${ UUID.randomUUID().toString()}"
-node("packer"){
+node{
     stage('Pull Repo') {
         git branch: 'dev', url: 'https://github.com/shamal112mn/demo-aws-cicd.git'
     }
