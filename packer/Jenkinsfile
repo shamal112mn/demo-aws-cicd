@@ -23,12 +23,16 @@ node{
             stage('Packer Validate') {
                 sh """
                 cd packer
+                packer version
                 packer validate packertest.json
                 cat text.txt
                 """
             }
             stage('Packer Build') {
-                sh 'packer build packer/packertest.json'
+                sh """
+                cd packer
+                packer build packertest.json
+                """
             }
         }
     }
