@@ -1,0 +1,44 @@
+{
+    "variables": {
+        "aws_access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
+        "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",  
+        "aws_region": "{{env `AWS_REGION`}}",
+        "ami_name": "{{env `PACKER_AMI_NAME`}}"
+    },
+    "builders": [
+      {
+        "aws_access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
+        "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",  
+        "aws_region": "{{env `AWS_REGION`}}",
+        "ami_name": "{{env `PACKER_AMI_NAME`}}",
+        "type": "amazon-ebs",
+        "profile": "default",         
+        "instance_type": "t2.micro",
+        "source_ami": "ami-0443305dabd4be2bc",
+        "ssh_username": "ec2-user", 
+        "ami_description": "Amazon Linux",
+        "run_tags": {
+          "Name": "packer-image-builder",
+          "Tool": "Packer",
+          "Author": "company"
+        }
+      }
+    ],
+    "provisioners": [
+        {
+         "type": "shell",
+         "inline": 
+            [                               
+             "sudo yum install httpd -y",
+             "sudo systemctl start httpd",
+             "sudo systemctl enable httpd"                 
+            ]
+        },
+       {
+         "type": "file",
+         "source": "index.html",
+         "destination": "/var/www/html"
+       }
+  ]
+  }
+  
